@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Database Service (MongoDB)
+  mongodb:
+    image: mongo:latest
+    container_name: resume_analyzer_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # Backend API Service
+  backend:
+    build: ./Backend
+    container_name: resume_analyzer_backend
+    ports:
+      - "5005:5005"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/resume-analyzer
+      - PORT=5005
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
